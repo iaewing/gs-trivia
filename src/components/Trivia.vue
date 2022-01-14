@@ -19,17 +19,14 @@ export default {
     const question = ref(null);
 
     onMounted(() => {
-      axios.get('https://opentdb.com/api.php?amount=1')
-          .then(response => {
-            console.log(response);
-            result = response.data;
-          })
-      // console.log(result);
+      // axios.get('https://opentdb.com/api.php?amount=1')
+      //     .then(response => {
+      //       console.log(response);
+      //       result = response.data;
+      //     })
     })
 
     function getQuestions() {
-      // console.log("got the question");
-      // axios.get('https://opentdb.com/api.php?amount=1')
       console.log(result);
       question.value = result.results[0].question;
       console.log(question);
