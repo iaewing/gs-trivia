@@ -18,9 +18,19 @@ export default {
     const question = ref(null);
 
     async function getNewQuestion() {
+      // try {
+      //   const {data} = await axios.get('https://opentdb.com/api.php?amount=1');
+      //         console.log(data)
+      //         question.value = data.results?.[0].question;
+      // }
+      // catch (e) {
+      //   console.error(e);
+      // }
       await axios.get('https://opentdb.com/api.php?amount=1')
           .then(response => {
+
             question.value = response.data.results?.[0].question;
+            console.log(question.value)
           })
     }
 
