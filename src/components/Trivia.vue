@@ -2,11 +2,13 @@
   <div>
     <div aria-label="the question">{{ question }}</div>
     <button @click="getNewQuestion">Click Me for a new question!</button>
-    <div aria-label="correct answer">{{ correctAnswer }}</div>
+    <div aria-label="correct answer">
+      <input type="radio" name="answer" id="answer1">{{ correctAnswer }}
+    </div>
     <div aria-label="incorrect answers">
-      <div aria-label="incorrect answer">{{ wrongAnswers[0] }}</div>
-      <div aria-label="incorrect answer">{{ wrongAnswers[1] }}</div>
-      <div aria-label="incorrect answer">{{ wrongAnswers[2] }}</div>
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer2">{{ wrongAnswers[0] }}</div>
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer3">{{ wrongAnswers[1] }}</div>
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer4">{{ wrongAnswers[2] }}</div>
     </div>
   </div>
 </template>
@@ -17,7 +19,7 @@ import {ref} from 'vue'
 
 export default {
   name: "Trivia",
-  setup(){
+  setup() {
     let result = "hello";
     const question = ref(null);
     const correctAnswer = ref(null);
@@ -32,7 +34,7 @@ export default {
           })
     }
 
-    return { result, question, getNewQuestion, correctAnswer, wrongAnswers }
+    return {result, question, getNewQuestion, correctAnswer, wrongAnswers}
   }
 
 

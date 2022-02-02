@@ -50,23 +50,17 @@ describe('TriviaTest.vue', () => {
     })
 
     it('displays the incorrect answer', async () => {
-        // arrange
         mock.onGet(BASE_URL).reply(200, sampleResponse);
         const expectedWrongAnswers = sampleResponse.results[0].incorrect_answers;
 
         const triviaWrapper = shallowMount(Trivia);
         await triviaWrapper.find('button').trigger('click');
         const wrongAnswers = triviaWrapper.findAll("[aria-label='incorrect answer']");
-        // await nextTick();
-        // expect(wrongAnswers.text()).toContain(expectedWrongAnswers);
-
-        console.log(triviaWrapper);
 
         let arrayOfAnswers = [];
         for (let i = 0; i < wrongAnswers.length; ++i) {
             arrayOfAnswers.push(wrongAnswers[i].text());
         }
-        console.log(arrayOfAnswers);
 
         expectedWrongAnswers.forEach( function (incorrectAnswer) {
             expect(arrayOfAnswers).toContain(incorrectAnswer)
