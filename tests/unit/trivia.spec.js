@@ -1,11 +1,11 @@
 import {shallowMount} from '@vue/test-utils'
 import Trivia from '@/components/Trivia.vue'
-import {nextTick} from "vue";
 
 var axios = require("axios")
 var MockAdapter = require('axios-mock-adapter')
 var mock = new MockAdapter(axios);
 
+const BASE_URL = 'https://opentdb.com/api.php?amount=1';
 
 describe('TriviaTest.vue', () => {
     const sampleResponse = {
@@ -27,7 +27,7 @@ describe('TriviaTest.vue', () => {
     };
 
     it('can consume the trivia api', async () => {
-        mock.onGet('https://opentdb.com/api.php?amount=1').reply(200, sampleResponse)
+        mock.onGet(BASE_URL).reply(200, sampleResponse)
         const expectedResponse = sampleResponse.results?.[0].question;
 
         const triviaWrapper = shallowMount(Trivia);
@@ -38,7 +38,8 @@ describe('TriviaTest.vue', () => {
     });
 
     it('displays the correct answer', async () => {
-        mock.onGet('https://opentdb.com/api.php?amount=1').reply(200, sampleResponse)
+
+        mock.onGet(BASE_URL).reply(200, sampleResponse)
         const expectedResponse = sampleResponse.results[0].correct_answer;
 
         const triviaWrapper = shallowMount(Trivia);
@@ -50,17 +51,25 @@ describe('TriviaTest.vue', () => {
 
     it('displays the incorrect answer', async () => {
         // arrange
-        mock.onGet('https://opentbd.com/api.php?amount=1').reply(200, sampleResponse)
-        const expectedResponse = sampleResponse.results[0].incorrect_answers;
+        mock.onGet(BASE_URL).reply(200, sampleResponse);
+        const expectedWrongAnswers = sampleResponse.results[0].incorrect_answers;
 
         const triviaWrapper = shallowMount(Trivia);
         await triviaWrapper.find('button').trigger('click');
-        const wrongAnswer = triviaWrapper.findAll("[aria-label='incorrect answer']");
+        const wrongAnswers = triviaWrapper.findAll("[aria-label='incorrect answer']");
         // await nextTick();
-        // expect(wrongAnswer.text()).toContain(expectedResponse);
+        // expect(wrongAnswers.text()).toContain(expectedWrongAnswers);
 
-        expectedResponse.forEach( function (incorrectAnswer) {
-            expect(incorrectAnswer).toContain(wrongAnswer.text())
+        console.log(triviaWrapper);
+
+        let arrayOfAnswers = [];
+        for (let i = 0; i < wrongAnswers.length; ++i) {
+            arrayOfAnswers.push(wrongAnswers[i].text());
+        }
+        console.log(arrayOfAnswers);
+
+        expectedWrongAnswers.forEach( function (incorrectAnswer) {
+            expect(arrayOfAnswers).toContain(incorrectAnswer)
         })
     })
 })
