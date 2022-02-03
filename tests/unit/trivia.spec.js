@@ -6,28 +6,28 @@ var MockAdapter = require('axios-mock-adapter')
 var mock = new MockAdapter(axios);
 
 const BASE_URL = 'https://opentdb.com/api.php?amount=1';
+const sampleResponse = {
+    "response_code": 0,
+    "results": [
+        {
+            "category": "Entertainment: Television",
+            "type": "multiple",
+            "difficulty": "medium",
+            "question": "The fictional movie &#039;Rochelle, Rochelle&#039; features in which sitcom?",
+            "correct_answer": "Seinfeld",
+            "incorrect_answers": [
+                "Frasier",
+                "Cheers",
+                "Friends"
+            ]
+        }
+    ]
+};
+mock.onGet(BASE_URL).reply(200, sampleResponse)
 
 describe('TriviaTest.vue', () => {
-    const sampleResponse = {
-        "response_code": 0,
-        "results": [
-            {
-                "category": "Entertainment: Television",
-                "type": "multiple",
-                "difficulty": "medium",
-                "question": "The fictional movie &#039;Rochelle, Rochelle&#039; features in which sitcom?",
-                "correct_answer": "Seinfeld",
-                "incorrect_answers": [
-                    "Frasier",
-                    "Cheers",
-                    "Friends"
-                ]
-            }
-        ]
-    };
 
     it('can consume the trivia api', async () => {
-        mock.onGet(BASE_URL).reply(200, sampleResponse)
         const expectedResponse = sampleResponse.results?.[0].question;
 
         const triviaWrapper = shallowMount(Trivia);
@@ -38,8 +38,6 @@ describe('TriviaTest.vue', () => {
     });
 
     it('displays the correct answer', async () => {
-
-        mock.onGet(BASE_URL).reply(200, sampleResponse)
         const expectedResponse = sampleResponse.results[0].correct_answer;
 
         const triviaWrapper = shallowMount(Trivia);
@@ -50,7 +48,6 @@ describe('TriviaTest.vue', () => {
     })
 
     it('displays the incorrect answer', async () => {
-        mock.onGet(BASE_URL).reply(200, sampleResponse);
         const expectedWrongAnswers = sampleResponse.results[0].incorrect_answers;
 
         const triviaWrapper = shallowMount(Trivia);
