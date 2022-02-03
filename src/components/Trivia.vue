@@ -1,47 +1,40 @@
 <template>
   <div>
-    <button @click="getQuestions">Click Me!</button>
-    <p>{{ question }}</p>
+    <div aria-label="the question">{{ question }}</div>
     <button @click="getNewQuestion">Click Me for a new question!</button>
+    <div aria-label="correct answer">
+      <input type="radio" name="answer" id="answer1">{{ correctAnswer }}
+    </div>
+    <div aria-label="incorrect answers">
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer2">{{ wrongAnswers[0] }}</div>
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer3">{{ wrongAnswers[1] }}</div>
+      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer4">{{ wrongAnswers[2] }}</div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {onMounted, ref} from 'vue'
-
-
+import {ref} from 'vue'
 
 export default {
   name: "Trivia",
-  setup(){
+  setup() {
     let result = "hello";
     const question = ref(null);
+    const correctAnswer = ref(null);
+    const wrongAnswers = ref([]);
 
-    onMounted(() => {
-      // axios.get('https://opentdb.com/api.php?amount=1')
-      //     .then(response => {
-      //       console.log(response);
-      //       result = response.data;
-      //     })
-    })
-
-    function getQuestions() {
-      console.log(result);
-      question.value = result.results[0].question;
-      console.log(question);
-    }
-
-    function getNewQuestion() {
-      axios.get('https://opentdb.com/api.php?amount=1')
+    async function getNewQuestion() {
+      await axios.get('https://opentdb.com/api.php?amount=1')
           .then(response => {
-            console.log(response);
-            result = response.data;
+            question.value = response.data.results?.[0].question;
+            correctAnswer.value = response.data.results?.[0].correct_answer;
+            wrongAnswers.value = response.data.results?.[0].incorrect_answers;
           })
-      question.value = result.results[0].question;
     }
 
-    return { result, question, getQuestions, getNewQuestion }
+    return {result, question, getNewQuestion, correctAnswer, wrongAnswers}
   }
 
 
