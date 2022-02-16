@@ -1,15 +1,11 @@
 <template>
   <div>
     <div aria-label="the question">{{ question }}</div>
-    <button @click="getNewQuestion">Click Me for a new question!</button>
-    <div aria-label="correct answer">
-      <input type="radio" name="answer" id="answer1">{{ correctAnswer }}
+    <button @click="getNewQuestion" class="text-red-600">Click Me for a new question!</button>
+    <div aria-label="choices" v-for="(choice, index) in choiceAnswers" :key="index">
+      <input type="radio" name="answer" id="answer{{index}}">{{ choice }}
     </div>
-    <div aria-label="incorrect answers">
-      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer2">{{ wrongAnswers[0] }}</div>
-      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer3">{{ wrongAnswers[1] }}</div>
-      <div aria-label="incorrect answer"><input type="radio" name="answer" id="answer4">{{ wrongAnswers[2] }}</div>
-    </div>
+    <button aria-label="Submit">Submit</button>
   </div>
 </template>
 
@@ -23,18 +19,19 @@ export default {
     let result = "hello";
     const question = ref(null);
     const correctAnswer = ref(null);
-    const wrongAnswers = ref([]);
+    const choiceAnswers = ref([]);
 
     async function getNewQuestion() {
       await axios.get('https://opentdb.com/api.php?amount=1')
           .then(response => {
             question.value = response.data.results?.[0].question;
             correctAnswer.value = response.data.results?.[0].correct_answer;
-            wrongAnswers.value = response.data.results?.[0].incorrect_answers;
+            choiceAnswers.value = response.data.results?.[0].incorrect_answers;
+            choiceAnswers.value.push(correctAnswer.value)
           })
     }
 
-    return {result, question, getNewQuestion, correctAnswer, wrongAnswers}
+    return {result, question, getNewQuestion, correctAnswer, choiceAnswers}
   }
 
 

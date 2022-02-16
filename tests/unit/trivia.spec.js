@@ -63,4 +63,18 @@ describe('TriviaTest.vue', () => {
             expect(arrayOfAnswers).toContain(incorrectAnswer)
         })
     })
+
+    it('renders a submit button with appropriate text', async () => {
+        const triviaWrapper = shallowMount(Trivia);
+        const submitButton = triviaWrapper.find("[aria-label='Submit']");
+        expect(submitButton.isVisible()).toBe(true);
+        expect(submitButton.text()).toBe("Submit");
+    })
+
+    // it('renders answers and can choose an answer to submit', async () => {
+    //     const triviaWrapper = shallowMount(Trivia);
+    //     const submitButton = triviaWrapper.find("[aria-label='Submit']");
+    //     expect(submitButton.isVisible()).toBe(true);
+    //     expect(submitButton.text()).toBe("Submit");
+    // })
 })
