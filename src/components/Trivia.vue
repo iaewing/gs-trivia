@@ -2,7 +2,7 @@
   <div>
     <div aria-label="the question">{{ question }}</div>
     <button @click="getNewQuestion" class="text-red-600">Click Me for a new question!</button>
-    <div aria-label="choices" v-for="(choice, index) in choiceAnswers" :key="index">
+    <div aria-label="Possible Answers" v-for="(choice, index) in choiceAnswers" :key="index">
       <input type="radio" name="answer" id="answer{{index}}">{{ choice }}
     </div>
     <button aria-label="Submit">Submit</button>
@@ -29,6 +29,25 @@ export default {
             choiceAnswers.value = response.data.results?.[0].incorrect_answers;
             choiceAnswers.value.push(correctAnswer.value)
           })
+        choiceAnswers.value = shuffle(choiceAnswers.value)
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length,  randomIndex;
+
+      // While there remain elements to shuffle...
+      while (currentIndex !== 0) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
     }
 
     return {result, question, getNewQuestion, correctAnswer, choiceAnswers}

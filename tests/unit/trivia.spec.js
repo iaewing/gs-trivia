@@ -37,30 +37,21 @@ describe('TriviaTest.vue', () => {
         expect(triviaQuestion.text()).toContain(expectedResponse)
     });
 
-    it('displays the correct answer', async () => {
+    it('displays the possible answers', async () => {
         const expectedResponse = sampleResponse.results[0].correct_answer;
+        const expectedAnswers = sampleResponse.results[0].incorrect_answers;
+        expectedAnswers.push(expectedResponse);
 
         const triviaWrapper = shallowMount(Trivia);
         await triviaWrapper.find('button').trigger('click');
-        const correctAnswer = triviaWrapper.find("[aria-label='correct answer']")
-
-        expect(correctAnswer.text()).toContain(expectedResponse)
-    })
-
-    it('displays the incorrect answer', async () => {
-        const expectedWrongAnswers = sampleResponse.results[0].incorrect_answers;
-
-        const triviaWrapper = shallowMount(Trivia);
-        await triviaWrapper.find('button').trigger('click');
-        const wrongAnswers = triviaWrapper.findAll("[aria-label='incorrect answer']");
-
+        const possibleAnswers = triviaWrapper.findAll("[aria-label='Possible Answers']")
         let arrayOfAnswers = [];
-        for (let i = 0; i < wrongAnswers.length; ++i) {
-            arrayOfAnswers.push(wrongAnswers[i].text());
+        for (let i = 0; i < possibleAnswers.length; ++i) {
+            arrayOfAnswers.push(possibleAnswers[i].text());
         }
 
-        expectedWrongAnswers.forEach( function (incorrectAnswer) {
-            expect(arrayOfAnswers).toContain(incorrectAnswer)
+        expectedAnswers.forEach( function (expected) {
+            expect(arrayOfAnswers).toContain(expected)
         })
     })
 
