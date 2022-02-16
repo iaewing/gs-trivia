@@ -1,9 +1,9 @@
 import {shallowMount} from '@vue/test-utils'
 import Trivia from '@/components/Trivia.vue'
 
-var axios = require("axios")
-var MockAdapter = require('axios-mock-adapter')
-var mock = new MockAdapter(axios);
+const axios = require("axios")
+const MockAdapter = require('axios-mock-adapter')
+const mock = new MockAdapter(axios);
 
 const BASE_URL = 'https://opentdb.com/api.php?amount=1';
 const sampleResponse = {
