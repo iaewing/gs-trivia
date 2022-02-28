@@ -1,12 +1,12 @@
 <template>
   <div>
     <div aria-label="the question">{{ question }}</div>
-    <button @click="getNewQuestion" class="text-red-600">Click Me for a new question!</button>
+    <button aria-label="Click Me for a new question!" @click="getNewQuestion" class="text-red-600">Click Me for a new question!</button>
     <div aria-label="Possible Answers" v-for="(choice, index) in choiceAnswers" :key="index">
       <input type="radio" name="answer" id="answer{{index}}">{{ choice }}
     </div>
-    <button aria-label="Submit" @click="validateAnswer">Submit</button>
-    <div aria-label="Answer Results" v-if="isSubmitted">Hi Guys</div>
+    <button v-if="choiceAnswers.length > 0" class="bg-blue-500 font-bold text-white rounded-sm px-3 py-1" aria-label="Submit" @click="validateAnswer">Submit</button>
+    <div aria-label="Answer Results" v-if="isSubmitted">{{isCorrectAnswer}}</div>
   </div>
 </template>
 
@@ -22,6 +22,7 @@ export default {
     const correctAnswer = ref(null);
     const choiceAnswers = ref([]);
     const isSubmitted = ref(false);
+    const isCorrectAnswer = ref(false);
 
     async function getNewQuestion() {
       await axios.get('https://opentdb.com/api.php?amount=1')
@@ -36,7 +37,9 @@ export default {
 
     function validateAnswer() {
       isSubmitted.value = true;
+      window.alert('bing bong AYO')
     }
+
     function shuffle(array) {
       let currentIndex = array.length,  randomIndex;
 
@@ -55,7 +58,7 @@ export default {
       return array;
     }
 
-    return {result, question, getNewQuestion, correctAnswer, choiceAnswers, validateAnswer, isSubmitted}
+    return {result, question, getNewQuestion, correctAnswer, choiceAnswers, validateAnswer, isSubmitted, isCorrectAnswer}
   }
 
 
