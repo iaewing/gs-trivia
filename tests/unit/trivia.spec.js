@@ -87,10 +87,9 @@ describe('TriviaTest.vue', () => {
         expect(triviaWrapper.find("[aria-label='Answer Results']").isVisible()).toBe(true);
     })
 
-    it('can show tell the user if they are correct', async () => {
-        let window = {
-            alert: jest.fn()
-        }
+    it('can tell the user if they chose the correct answer', async () => {
+        window.alert = jest.fn()
+
         const triviaWrapper = shallowMount(Trivia);
         const correctAnswer = sampleResponse.results[0].correct_answer;
 
@@ -98,6 +97,19 @@ describe('TriviaTest.vue', () => {
         await triviaWrapper.find('input', {text: correctAnswer}).trigger('click');
         triviaWrapper.find("[aria-label='Submit']").trigger('click');
 
-        expect(window.alert).toHaveBeenCalled();
+        expect(window.alert).toHaveBeenCalledWith("Correct!");
+    })
+
+    it('can tell the user if they chose the wrong answer', async () => {
+        window.alert = jest.fn()
+
+        const triviaWrapper = shallowMount(Trivia);
+        const incorrectAnswer = sampleResponse.results[0].incorrect_answers[0];
+
+        await triviaWrapper.find('[aria-label=\'Click Me for a new question!\']').trigger('click');
+        await triviaWrapper.find('input', {text: incorrectAnswer}).trigger('click');
+        triviaWrapper.find("[aria-label='Submit']").trigger('click');
+
+        expect(window.alert).toHaveBeenCalledWith("NO!");
     })
 })
