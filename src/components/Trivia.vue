@@ -6,7 +6,6 @@
       <input type="radio" name="answer" id="answer{{index}}" :value="choice" v-model="selection">{{ choice }}
     </div>
     <button v-if="choiceAnswers.length > 0" class="bg-blue-500 font-bold text-white rounded-sm px-3 py-1" aria-label="Submit" @click="validateAnswer">Submit</button>
-    <div aria-label="Answer Results" v-if="isSubmitted">{{isCorrectAnswer}}</div>
   </div>
 </template>
 
@@ -21,7 +20,6 @@ export default {
     const question = ref(null);
     const correctAnswer = ref(null);
     const choiceAnswers = ref([]);
-    const isSubmitted = ref(false);
     const isCorrectAnswer = ref(false);
     const selection = ref(null);
 
@@ -37,13 +35,13 @@ export default {
     }
 
     function validateAnswer() {
-      isSubmitted.value = true;
       let message = 'NO!'
       if (selection.value === correctAnswer.value)
       {
         message = 'Correct!'
       }
       window.alert(message)
+      getNewQuestion()
     }
 
     function shuffle(array) {
@@ -64,7 +62,7 @@ export default {
       return array;
     }
 
-    return {result, question, getNewQuestion, correctAnswer, choiceAnswers, validateAnswer, isSubmitted, isCorrectAnswer, selection}
+    return {result, question, getNewQuestion, correctAnswer, choiceAnswers, validateAnswer, isCorrectAnswer, selection}
   }
 
 

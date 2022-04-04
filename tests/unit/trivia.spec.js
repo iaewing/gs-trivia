@@ -23,7 +23,18 @@ const sampleResponse = {
         }
     ]
 };
-mock.onGet(BASE_URL).reply(200, sampleResponse)
+const sampleResponseTwo = {
+    "response_code": 0,
+    "results": [{
+        "category": "Entertainment: Music",
+        "type": "boolean",
+        "difficulty": "medium",
+        "question": "For his performance at ComplexCon 2016 in Long Beach, California, Skrillex revived his &quot;Mothership&quot; set piece for one night only.",
+        "correct_answer": "True",
+        "incorrect_answers": ["False"]
+    }]
+};
+mock.onGet(BASE_URL).replyOnce(200, sampleResponse).onGet(BASE_URL).replyOnce(200, sampleResponseTwo);
 
 describe('TriviaTest.vue', () => {
     let windowSpy;
@@ -111,5 +122,21 @@ describe('TriviaTest.vue', () => {
         triviaWrapper.find("[aria-label='Submit']").trigger('click');
 
         expect(window.alert).toHaveBeenCalledWith("NO!");
+    })
+
+    it('loads a new question after answering the question', async () => {
+        window.alert = jest.fn()
+
+        const triviaWrapper = shallowMount(Trivia);
+        const incorrectAnswer = sampleResponse.results[0].incorrect_answers[0];
+
+        await triviaWrapper.find('[aria-label=\'Click Me for a new question!\']').trigger('click');
+        await triviaWrapper.find('input', {text: incorrectAnswer}).trigger('click');
+        await triviaWrapper.find("[aria-label='Submit']").trigger('click')
+
+        // find the question text for the second question
+        const question = await triviaWrapper.find('[aria-label="the question"]')
+        expect(question.text()).toContain(sampleResponseTwo.results[0].question);
+
     })
 })
