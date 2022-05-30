@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-red-100 h-screen flex flex-col justify-center items-center">
     <Welcome/>
-    <Trivia/>
+    <Trivia class="border"/>
   </div>
 </template>
 
